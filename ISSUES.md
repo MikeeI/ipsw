@@ -9,11 +9,11 @@ Next finding ID: ISSUE-2026-009
 
 ### ISSUE-2026-001 — ota: Pallas requests create a separate HTTP transport per request
 
-- `GetPallasOTAs` starts one `sendPostAsync` job for every generated Pallas request.
-- `sendPostAsync` creates a new client, transport, certificate pool, and TLS configuration for each job.
-- Client reuse is source-proven; request cardinality, handshake count, latency, and throughput are not measured.
+- The unfiltered iOS path expands three non-empty audiences across 385 current board IDs, yielding 1,155 jobs.
+- `sendPostAsync` creates a client, transport, certificate pool, and TLS configuration for every job.
+- Reuse is source-proven; Pallas negotiated HTTP/1.1, while latency and allocation impact remain unmeasured.
 
-Status: Hold — source-proven; performance impact not measured and upstream duplicate research not completed.
+Status: Drafted for a new enhancement issue — prior-art research completed; exact draft awaits user approval.
 Location: Not published.
 
 ### ISSUE-2026-002 — ota: Pallas response error paths leave bodies open
