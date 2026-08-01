@@ -141,3 +141,33 @@ Do not use decorative tables, ANSI styling, filler prose, progress spam, or dupl
 Use human-facing formatting only when output is explicitly for humans.
 Document that audience in the command, help, or output contract before choosing richer formatting.
 </essential-rule>
+
+## Project Context
+
+`ipsw` is a Go command-line research framework for downloading, parsing, and analyzing Apple firmware, Mach-O
+binaries, dyld shared caches, kernelcaches, and connected iOS devices. The two shipped applications are the `ipsw`
+CLI in `cmd/ipsw` and the `ipswd` REST daemon in `cmd/ipswd`.
+
+MANDATORY: Before changing dependencies or Go compatibility, read `go.mod` with the file-reading tool and use it as
+the dependency and toolchain SSOT. Do not duplicate its module versions here.
+
+MANDATORY: Before changing build, format, generated documentation, snapshot, or release behavior, read `Makefile`
+with the file-reading tool and use its targets as active context. `snapshot`, `dry_release`, `release`,
+`release-minor`, and `docs` require the closed-source `pkg/sandbox` package and must fail clearly when it is absent
+from a public clone; do not bypass `_require-sandbox` or invent a fallback.
+
+MANDATORY: Before preparing an upstream issue, discussion, or pull request, read `CONTRIBUTING.md` and
+`AI_POLICY.md` with the file-reading tool and follow both. Material AI assistance must be disclosed, and every claim,
+log, reproduction, benchmark, reverse-engineering conclusion, and test result must come from evidence actually
+produced and verified for the submission.
+
+## Change Boundaries
+
+Keep CLI presentation and command wiring under `cmd/ipsw`; keep daemon wiring under `cmd/ipswd` and HTTP contracts
+under `api`; place reusable Apple-format and research functionality in `pkg`; keep application-private
+implementation in `internal`. Do not move reusable behavior into a command package or expose `internal` details
+through public package contracts.
+
+Use the narrowest relevant `go test` package for behavioral verification. Use `make build` when a change affects CLI
+integration or repository-wide compilation. `make fmt` rewrites Go files repository-wide; in concurrent work, format
+only owned files with the repository's Go formatters unless the full tree is intentionally owned.
